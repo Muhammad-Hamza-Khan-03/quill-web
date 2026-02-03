@@ -1,101 +1,146 @@
-import Image from "next/image";
+'use client';
+
+import Navbar from '../components/Navbar';
+import ScrollyCanvas from '../components/ScrollyCanvas';
+import { motion, Variants } from 'framer-motion';
+
+const fadeInUp: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1]
+    }
+  }
+};
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <main className="bg-[#04070B] min-h-screen">
+      <Navbar />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      <ScrollyCanvas>
+
+        {/* HERO / INTRO (0-15%) */}
+        <section className="absolute top-0 w-full h-screen flex flex-col items-center justify-center text-center px-6 pointer-events-auto">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+            className="max-w-4xl"
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <h1 className="text-6xl md:text-8xl font-serif text-white/92 tracking-tight mb-6">
+              Pure Cashmere Pashmina
+            </h1>
+            <p className="text-xl md:text-2xl text-white/65 font-light tracking-wide max-w-2xl mx-auto">
+              Crafted by hand. Designed to be felt.<br />
+              <span className="text-sm uppercase tracking-[0.2em] mt-4 block opacity-60">From the highlands of Pakistan</span>
+            </p>
+          </motion.div>
+        </section>
+
+        {/* HERITAGE (25%) */}
+        <section className="absolute top-[25%] w-full h-screen flex items-center px-8 md:px-24 pointer-events-auto">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ margin: "-20%" }}
+            variants={fadeInUp}
+            className="max-w-xl text-left"
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+            <span className="text-blue-400/80 uppercase tracking-widest text-xs font-bold mb-4 block">Heritage</span>
+            <h2 className="text-5xl md:text-6xl font-serif text-white/90 mb-6 leading-tight">
+              Rooted in centuries <br />of craftsmanship.
+            </h2>
+            <p className="text-lg text-white/60 leading-relaxed space-y-4">
+              <span className="block">Handwoven in Pakistan using time-honored techniques passed down through generations.</span>
+              <span className="block">Every shawl tells a story of patience, skill, and an enduring legacy that refuses to compromise on quality.</span>
+            </p>
+          </motion.div>
+        </section>
+
+        {/* MATERIAL (50%) */}
+        <section className="absolute top-[50%] w-full h-screen flex items-center justify-end px-8 md:px-24 pointer-events-auto">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ margin: "-20%" }}
+            variants={fadeInUp}
+            className="max-w-xl text-right"
+          >
+            <span className="text-cyan-400/80 uppercase tracking-widest text-xs font-bold mb-4 block">Material</span>
+            <h2 className="text-5xl md:text-6xl font-serif text-white/90 mb-6 leading-tight">
+              Pure Cashmere. <br />Nothing else.
+            </h2>
+            <ul className="text-lg text-white/60 leading-relaxed space-y-2 inline-block text-right">
+              <li className="flex items-center justify-end gap-3">
+                <span>Ultra-fine natural fibers</span>
+                <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
+              </li>
+              <li className="flex items-center justify-end gap-3">
+                <span>Breathable, lightweight warmth</span>
+                <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
+              </li>
+              <li className="flex items-center justify-end gap-3">
+                <span>Exceptionally soft hand feel</span>
+                <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
+              </li>
+            </ul>
+          </motion.div>
+        </section>
+
+        {/* COLOR (75%) */}
+        <section className="absolute top-[75%] w-full h-screen flex items-center justify-center px-6 pointer-events-auto">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ margin: "-20%" }}
+            variants={fadeInUp}
+            className="max-w-3xl text-center bg-black/20 backdrop-blur-sm p-12 rounded-2xl border border-white/5"
+          >
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 uppercase tracking-widest text-xs font-bold mb-4 block">Aesthetic</span>
+            <h2 className="text-5xl md:text-6xl font-serif text-white/90 mb-6">
+              Designed in blues that captivate.
+            </h2>
+            <p className="text-xl text-white/60 leading-normal">
+              Contrastive, modern palettes inspired by night skies and winter light.
+              Elegant, bold, and unmistakably refined.
+            </p>
+          </motion.div>
+        </section>
+
+        {/* FINAL DRAPE (90-95%) */}
+        <section className="absolute top-[92%] w-full h-[80vh] flex flex-col items-center justify-center text-center px-6 pointer-events-auto pb-20">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ margin: "-10%" }}
+            variants={fadeInUp}
+            className="max-w-2xl"
+          >
+            <h2 className="text-6xl font-serif text-white mb-6">Luxury you can feel.</h2>
+            <p className="text-xl text-white/70 mb-10">Pure Cashmere Pashmina — timeless, effortless, enduring.</p>
+
+            <div className="flex flex-col md:flex-row gap-6 justify-center">
+              <button className="px-10 py-4 bg-white text-black text-sm uppercase tracking-widest font-semibold hover:bg-gray-200 transition-colors duration-300">
+                Explore The Collection
+              </button>
+              <button className="px-10 py-4 border border-white/20 text-white text-sm uppercase tracking-widest font-semibold hover:bg-white/5 transition-colors duration-300">
+                View Details
+              </button>
+            </div>
+          </motion.div>
+        </section>
+
+      </ScrollyCanvas>
+
+      {/* Footer / Contact (Below the scroll canvas to finish the page) */}
+      <footer className="bg-[#020305] text-white/40 py-12 text-center text-xs tracking-widest border-t border-white/5">
+        <p>&copy; 2024 PASHMINA LUXURY. CRAFTED IN PAKISTAN.</p>
       </footer>
-    </div>
+    </main>
   );
 }
