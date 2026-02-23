@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
+
 import CollectionPageContent from './CollectionPageContent';
 import { Product } from '@/types';
 
