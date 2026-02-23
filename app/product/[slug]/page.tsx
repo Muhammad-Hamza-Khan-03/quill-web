@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = 'force-static';
+
 import React, { useEffect } from 'react';
 import ProductDetailPage from '@/pages_components/ProductDetailPage';
 import NotFoundPage from '@/pages_components/NotFoundPage';
