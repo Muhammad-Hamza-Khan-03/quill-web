@@ -2,40 +2,90 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: 4 7 11;
-  /* #04070B */
-  --foreground: 255 255 255;
+@layer base {
+  :root {
+    --bg: #04070B;
+    --fg: #E2E8F0;
+    --card-bg: #1A1D23;
+    --border: rgba(17, 115, 212, 0.1);
+    --muted: rgba(226, 232, 240, 0.4);
+    --nav-bg: rgba(4, 7, 11, 0.8);
+  }
+
+  body {
+    @apply bg-luxury-black text-luxury-text font-sans antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif;
+  }
 }
 
-body {
-  color: rgb(var(--foreground));
-  background: rgb(var(--background));
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.snap-container {
+  scroll-snap-type: y proximity;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
+.snap-section {
+  scroll-snap-align: start;
 }
 
-::-webkit-scrollbar-track {
-  background: #04070B;
+/* WOW Factor: Custom Cursor */
+.custom-cursor-outer {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform 0.15s ease-out, width 0.3s ease, height 0.3s ease;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 3px;
+/* WOW Factor: Atmospheric Background */
+.atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(17, 115, 212, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(17, 115, 212, 0.03) 0%, transparent 50%);
+  filter: blur(80px);
+  pointer-events: none;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #2F4BFF;
+.luxury-border {
+  @apply border border-luxury-border;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+.luxury-button {
+  @apply bg-luxury-blue hover:bg-blue-600 text-white font-medium py-3 px-8 transition-all duration-300 uppercase tracking-widest text-xs;
+}
+
+.luxury-input {
+  @apply bg-transparent border border-luxury-border px-4 py-3 outline-none transition-all duration-300;
+}
+
+.luxury-input:focus {
+  border-color: rgba(226, 232, 240, 0.5);
+}
+
+/* Skeleton shimmer animation */
+.skeleton-shimmer {
+  animation: shimmer 2s infinite;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }
