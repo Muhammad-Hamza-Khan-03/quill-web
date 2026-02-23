@@ -1,53 +1,33 @@
-"use client";
+import ProductPageContent from './ProductPageContent';
+import type { Product, Review } from '@/types';
 
-export const dynamic = 'force-static';
-
-import React, { useEffect } from 'react';
-import ProductDetailPage from '@/pages_components/ProductDetailPage';
-import NotFoundPage from '@/pages_components/NotFoundPage';
-import { useRouter, useParams } from 'next/navigation';
-import { useCart } from '@/components/CartProvider';
-import { useProductStore } from '@/store/useProductStore';
-import { useReviewStore } from '@/store/useReviewStore';
-import { Loader2 } from 'lucide-react';
-
-export default function Product() {
-    const router = useRouter();
-    const params = useParams();
-    const { addToCart } = useCart();
-    const { currentProduct, fetchProductBySlug, loading } = useProductStore();
-    const { reviews, fetchReviews } = useReviewStore();
-
-    useEffect(() => {
-        if (params.slug) {
-            fetchProductBySlug(params.slug as string);
-        }
-    }, [params.slug, fetchProductBySlug]);
-
-    useEffect(() => {
-        if (currentProduct?._id) {
-            fetchReviews(currentProduct._id);
-        }
-    }, [currentProduct?._id, fetchReviews]);
-
-    if (loading && !currentProduct) {
-        return (
-            <div className="h-screen flex items-center justify-center bg-luxury-black">
-                <Loader2 className="w-12 h-12 text-luxury-blue animate-spin" />
-            </div>
-        );
+async function getProduct(slug: string): Promise<Product | null> {
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1'}/products/${slug}`, { 
+            cache: 'no-store' 
+        });
+        if (!res.ok) return null;
+        return res.json();
+    } catch {
+        return null;
     }
+}
 
-    if (!currentProduct && !loading) {
-        return <NotFoundPage onReturn={() => router.push('/collections')} />;
+async function getReviews(productId: string): Promise<Review[]> {
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1'}/reviews/${productId}`, { 
+            cache: 'no-store' 
+        });
+        if (!res.ok) return [];
+        return res.json();
+    } catch {
+        return [];
     }
+}
 
-    return (
-        <ProductDetailPage
-            product={currentProduct!}
-            reviews={reviews}
-            onBack={() => router.push('/collections')}
-            onAddToCart={addToCart}
-        />
-    );
+export default async function Product({ params }: { params: { slug: string } }) {
+    const product = await getProduct(params.slug);
+    const reviews = product?._id ? await getReviews(product._id) : [];
+    
+    return <ProductPageContent product={product} reviews={reviews} />;
 }
