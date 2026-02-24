@@ -7,6 +7,8 @@ import {
 import { Product } from '../types';
 import { motion } from 'motion/react';
 import { formatPrice } from '@/lib/formatters';
+import Image from 'next/image';
+
 
 interface HomePageProps {
   onExplore: () => void;
@@ -96,7 +98,7 @@ export default function HomePage({ onExplore, onSelectProduct, onPageChange, pro
         <div className="max-w-[1200px] mx-auto grid md:grid-cols-2 gap-20 items-center">
           <div className="relative group">
             <div className="absolute -inset-4 bg-luxury-blue/10 rounded-xl blur-2xl group-hover:bg-luxury-blue/20 transition-all"></div>
-            <img
+            <Image
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPX2R8W56HAMazZAbv0KxbCLKaTnbyvOMkkkGF_C1RXoXF7xLVjCcwPRcdb5C6GHL0xESs46lQTmIGGy_JMcspw0ZhtEc4zT7TZ345URXtxP-km1I43muI_AvLlEsPj7y92kg9fO8KAUGDs5B2HP0tk-AaFuXXqdNCi7lYRV5_FI9dPdCDRBBmk95RPM1HTQi82KPegyrlfcKNKFAGduJcx_DxnNz8DqVi-KuroL78BvfoJa-s_jOic80XJHj2Ee3Vicjs5c0cv3M"
               alt="The Weaver"
               className="relative rounded-xl w-full aspect-[4/5] object-cover shadow-2xl grayscale hover:grayscale-0 transition-all duration-700"
@@ -166,7 +168,7 @@ export default function HomePage({ onExplore, onSelectProduct, onPageChange, pro
                   onClick={() => onSelectProduct(product)}
                 >
                   <div className="relative overflow-hidden aspect-[3/4] rounded-lg mb-6">
-                    <img
+                    <Image
                       src={getProductImage(product)}
                       alt={product.name}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -196,7 +198,7 @@ export default function HomePage({ onExplore, onSelectProduct, onPageChange, pro
 
       {/* Full-Width Lookbook */}
       <section className="relative h-[80vh] flex items-center overflow-hidden snap-section">
-        <img
+        <Image
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtofBaRc4w09bZSY4agL2FajDcbM4-C0YYzWplnmisdYBPwHDYO89r0wc7pwqcHS5XGd-lpRPL736xCGmI2ZfaKAIHo0O1vIXTIXFDDeSvRtAP0HbYEjvAY8DU2uJVUAvI2zhlqU_OD8ufQUwlqU5A4CIPtGP5qJfLGNShWMkSyRd3XpD_6kg-cQ8Qxl8IaitOKx0e11DCbHRjCQUPRlYq9CReoWrNj7funeLZ7K4kx9Jvp5ckhayuWEEe_UcgEA7IBzOj7YLjGu4"
           alt="Lookbook 2024"
           className="absolute inset-0 w-full h-full object-cover"
