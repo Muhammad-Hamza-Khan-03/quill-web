@@ -18,7 +18,7 @@ export default function ShareModal({ isOpen, onClose, productUrl, productName, p
   const [isAnimating, setIsAnimating] = useState(false);
 
   const fullUrl = typeof window !== 'undefined' ? `${window.location.origin}${productUrl}` : productUrl;
-  const shareText = `Check out this stunning ${productName} from Pashmina Luxury! ✨`;
+  const shareText = `Check out this stunning ${productName} from Quill! ✨`;
 
   const handleCopy = async () => {
     try {
@@ -137,7 +137,7 @@ export default function ShareModal({ isOpen, onClose, productUrl, productName, p
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-white truncate">{productName}</p>
-                    <p className="text-xs text-slate-400">Pashmina Luxury</p>
+                    <p className="text-xs text-slate-400">Quill</p>
                   </div>
                 </div>
               )}
@@ -170,8 +170,8 @@ export default function ShareModal({ isOpen, onClose, productUrl, productName, p
                     whileTap={{ scale: 0.95 }}
                     onClick={handleCopy}
                     className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${copied
-                        ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                        : 'bg-luxury-blue text-white hover:bg-blue-600'
+                      ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                      : 'bg-luxury-blue text-white hover:bg-blue-600'
                       }`}
                   >
                     <AnimatePresence mode="wait">

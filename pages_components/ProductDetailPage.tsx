@@ -102,7 +102,7 @@ export default function ProductDetailPage({ product, reviews, onBack, onAddToCar
   useEffect(() => {
     if (product?.name) {
       const originalTitle = document.title;
-      document.title = `${product.name} | Pashmina Luxury`;
+      document.title = `${product.name} | Quill`;
       return () => { document.title = originalTitle; };
     }
   }, [product?.name]);

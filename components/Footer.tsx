@@ -46,14 +46,14 @@ export default function Footer() {
           <h4 className="font-bold uppercase tracking-widest text-xs mb-8 text-slate-100">Join the Circle</h4>
           <p className="text-sm text-slate-500 mb-6 leading-relaxed">Subscribe for early access to limited releases and private previews.</p>
           <form className="flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
-            <input 
-              className="bg-white/5 border border-white/10 rounded-lg focus:ring-luxury-blue focus:border-luxury-blue text-sm px-4 py-3 text-white outline-none" 
-              placeholder="Your email address" 
+            <input
+              className="bg-white/5 border border-white/10 rounded-lg focus:ring-luxury-blue focus:border-luxury-blue text-sm px-4 py-3 text-white outline-none"
+              placeholder="Your email address"
               type="email"
             />
             <div className="flex gap-3">
               <button className="flex-1 bg-luxury-blue text-white py-3 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-blue-600 transition-all">Request Access</button>
-              <a 
+              <a
                 href="mailto:contact@pashminaluxury.com?subject=Join%20the%20Circle%20Inquiry"
                 className="w-12 h-12 rounded-lg border border-white/10 flex items-center justify-center hover:bg-luxury-blue transition-colors text-slate-400 hover:text-white shrink-0"
                 title="Send us an email"
@@ -65,7 +65,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="max-w-[1400px] mx-auto pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] uppercase tracking-[0.2em] text-slate-600">
-        <p>© 2024 Pashmina Luxury. All Rights Reserved.</p>
+        <p>© 2024 Quill. All Rights Reserved.</p>
         <div className="flex gap-8">
           <a className="hover:text-slate-400 transition-colors" href="#">Privacy</a>
           <a className="hover:text-slate-400 transition-colors" href="#">Terms</a>

@@ -35,12 +35,13 @@ export default function Navbar({ logoUrl }: NavbarProps) {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 cursor-pointer group">
             {logoUrl ? (
-              <Image fill sizes="(max-width: 768px) 100vw, 50vw" width={40} height={40} src={logoUrl} alt="Pashmina Luxury" className="object-contain rounded-lg" />
+              <Image fill sizes="(max-width: 768px) 100vw, 50vw" width={40} height={40} src={logoUrl} alt="Quill" className="object-contain rounded-lg" />
             ) : (
               <Layers className="w-8 h-8 text-luxury-blue transition-transform group-hover:scale-110" />
             )}
             <h2 className="font-serif italic text-2xl tracking-tight text-white">
-              Pashmina <span className="font-bold not-italic">Luxury</span>
+              {/* Quill */}
+              <span className="font-bold not-italic">Quill</span>
             </h2>
           </Link>
 

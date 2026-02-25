@@ -1,4 +1,4 @@
-# Design System: Pashmina Luxury
+# Design System: Quill
 
 A cinematic, scrollytelling experience designed to showcase the heritage and craftsmanship of pure Cashmere Pashmina.
 

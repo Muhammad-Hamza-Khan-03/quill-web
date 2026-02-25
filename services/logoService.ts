@@ -7,7 +7,7 @@
 //     contents: {
 //       parts: [
 //         {
-//           text: "A minimalist and elegant logo for a luxury brand named 'Pashmina Luxury'. The logo should feature a stylized, abstract representation of a pashmina shawl or a soft fiber weave, conveying high-end quality, softness, and Himalayan heritage. Use a sophisticated color palette like deep navy and gold. Clean lines, vector style, bigger and No background",
+//           text: "A minimalist and elegant logo for a luxury brand named 'Quill'. The logo should feature a stylized, abstract representation of a pashmina shawl or a soft fiber weave, conveying high-end quality, softness, and Himalayan heritage. Use a sophisticated color palette like deep navy and gold. Clean lines, vector style, bigger and No background",
 //         },
 //       ],
 //     },

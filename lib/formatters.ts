@@ -2,7 +2,7 @@ import { ProductPrice } from "@/types";
 
 /**
  * Formats a price object or number into a human-readable string.
- * Currently defaults to PKR for Pashmina Luxury.
+ * Currently defaults to PKR for Quill.
  */
 export const formatPrice = (price: ProductPrice | number | undefined): string => {
     if (price === undefined) return "N/A";

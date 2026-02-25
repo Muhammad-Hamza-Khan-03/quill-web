@@ -11,7 +11,7 @@ export default function NotFoundPage({ onReturn }: NotFoundPageProps) {
     <div className="min-h-[80vh] flex flex-col items-center justify-center text-center px-6 relative overflow-hidden">
       {/* Decorative Elements */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-luxury-blue/5 rounded-full blur-[120px] -z-10" />
-      
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -19,7 +19,7 @@ export default function NotFoundPage({ onReturn }: NotFoundPageProps) {
         className="space-y-8 max-w-2xl"
       >
         <div className="relative inline-block">
-          <motion.h1 
+          <motion.h1
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, duration: 1 }}
@@ -39,13 +39,13 @@ export default function NotFoundPage({ onReturn }: NotFoundPageProps) {
           </p>
         </div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
           className="pt-8"
         >
-          <button 
+          <button
             onClick={onReturn}
             className="luxury-button group flex items-center gap-3 mx-auto"
           >
@@ -57,7 +57,7 @@ export default function NotFoundPage({ onReturn }: NotFoundPageProps) {
 
       {/* Background Micro-details */}
       <div className="absolute bottom-20 left-10 opacity-10 hidden lg:block">
-        <span className="text-[10px] uppercase tracking-[0.5em] text-white vertical-rl rotate-180">Pashmina Luxury Heritage</span>
+        <span className="text-[10px] uppercase tracking-[0.5em] text-white vertical-rl rotate-180">Quill Heritage</span>
       </div>
       <div className="absolute top-40 right-10 opacity-10 hidden lg:block">
         <span className="text-[10px] uppercase tracking-[0.5em] text-white vertical-rl">Excellence in every thread</span>

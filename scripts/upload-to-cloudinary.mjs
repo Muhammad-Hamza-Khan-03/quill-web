@@ -215,7 +215,7 @@ async function batchUpload(files) {
 async function main() {
     console.log('');
     console.log('╔══════════════════════════════════════════════════╗');
-    console.log('║   Pashmina Luxury — Cloudinary Batch Uploader   ║');
+    console.log('║   Quill — Cloudinary Batch Uploader   ║');
     console.log('╚══════════════════════════════════════════════════╝');
     console.log('');
     console.log(`  Cloud:    ${CLOUD_NAME}`);

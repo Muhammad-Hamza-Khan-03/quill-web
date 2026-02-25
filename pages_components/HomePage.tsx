@@ -113,7 +113,7 @@ export default function HomePage({ onExplore, onSelectProduct, onPageChange, pro
               A Legacy Spun <br /><span className="italic text-luxury-blue">in Gold</span>
             </h2>
             <p className="text-slate-400 text-lg leading-relaxed mb-8">
-              Born in the high altitudes of the Himalayas, each Pashmina Luxury piece tells a story of centuries-old weaving traditions passed through generations. We source only the finest undercoat fibers from the Changthangi goat, ensuring a softness that is incomparable to any other textile.
+              Born in the high altitudes of the Himalayas, each Quill piece tells a story of centuries-old weaving traditions passed through generations. We source only the finest undercoat fibers from the Changthangi goat, ensuring a softness that is incomparable to any other textile.
             </p>
             <div className="space-y-6">
               <div className="flex items-start gap-4">
