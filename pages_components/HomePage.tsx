@@ -5,7 +5,7 @@ import {
   PenTool,
 } from 'lucide-react';
 import { Product } from '../types';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { formatPrice } from '@/lib/formatters';
 import Image from 'next/image';
 
@@ -16,10 +16,11 @@ interface HomePageProps {
   onPageChange: (page: any) => void;
   products: Product[];
   loading: boolean;
+  onAddToCart: (product: Product) => void;
 }
 
-export default function HomePage({ onExplore, onSelectProduct, onPageChange, products, loading }: HomePageProps) {
-  const newArrivals = products.slice(0, 4);
+export default function HomePage({ onExplore, onSelectProduct, onPageChange, products, loading, onAddToCart }: HomePageProps) {
+  const newArrivals = Array.isArray(products) ? products.slice(0, 4) : [];
 
   const getProductImage = (product: Product) => {
     return product.variations && product.variations.length > 0
@@ -101,7 +102,9 @@ export default function HomePage({ onExplore, onSelectProduct, onPageChange, pro
             <Image
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPX2R8W56HAMazZAbv0KxbCLKaTnbyvOMkkkGF_C1RXoXF7xLVjCcwPRcdb5C6GHL0xESs46lQTmIGGy_JMcspw0ZhtEc4zT7TZ345URXtxP-km1I43muI_AvLlEsPj7y92kg9fO8KAUGDs5B2HP0tk-AaFuXXqdNCi7lYRV5_FI9dPdCDRBBmk95RPM1HTQi82KPegyrlfcKNKFAGduJcx_DxnNz8DqVi-KuroL78BvfoJa-s_jOic80XJHj2Ee3Vicjs5c0cv3M"
               alt="The Weaver"
-              className="relative rounded-xl w-full aspect-[4/5] object-cover shadow-2xl grayscale hover:grayscale-0 transition-all duration-700"
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              className="relative rounded-xl object-cover shadow-2xl grayscale hover:grayscale-0 transition-all duration-700"
               referrerPolicy="no-referrer"
             />
           </div>
@@ -171,6 +174,8 @@ export default function HomePage({ onExplore, onSelectProduct, onPageChange, pro
                     <Image
                       src={getProductImage(product)}
                       alt={product.name}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       referrerPolicy="no-referrer"
                     />
@@ -201,7 +206,9 @@ export default function HomePage({ onExplore, onSelectProduct, onPageChange, pro
         <Image
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtofBaRc4w09bZSY4agL2FajDcbM4-C0YYzWplnmisdYBPwHDYO89r0wc7pwqcHS5XGd-lpRPL736xCGmI2ZfaKAIHo0O1vIXTIXFDDeSvRtAP0HbYEjvAY8DU2uJVUAvI2zhlqU_OD8ufQUwlqU5A4CIPtGP5qJfLGNShWMkSyRd3XpD_6kg-cQ8Qxl8IaitOKx0e11DCbHRjCQUPRlYq9CReoWrNj7funeLZ7K4kx9Jvp5ckhayuWEEe_UcgEA7IBzOj7YLjGu4"
           alt="Lookbook 2024"
-          className="absolute inset-0 w-full h-full object-cover"
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          className="absolute inset-0 object-cover"
           referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-luxury-black/40"></div>

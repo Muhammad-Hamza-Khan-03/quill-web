@@ -2,6 +2,7 @@
 
 import ProductDetailPage from '@/pages_components/ProductDetailPage';
 import { Product, Review } from '@/types';
+import { useCart } from '@/components/CartProvider';
 
 interface ProductPageContentProps {
     product: Product | null;
@@ -9,6 +10,8 @@ interface ProductPageContentProps {
 }
 
 export default function ProductPageContent({ product, reviews }: ProductPageContentProps) {
+    const { addToCart } = useCart();
+
     if (!product) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-luxury-black">
@@ -22,7 +25,7 @@ export default function ProductPageContent({ product, reviews }: ProductPageCont
             product={product}
             reviews={reviews}
             onBack={() => {}}
-            onAddToCart={() => {}}
+            onAddToCart={addToCart}
         />
     );
 }

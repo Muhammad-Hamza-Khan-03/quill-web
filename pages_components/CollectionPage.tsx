@@ -1,5 +1,5 @@
 import { ArrowDown, Loader2 } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import ProductCard from '../components/ProductCard';
 import { ProductGridSkeleton } from '../components/Skeletons';
 import { Product } from '../types';

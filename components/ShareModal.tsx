@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { X, Copy, Check, Share2, MessageCircle, Instagram, Twitter, Mail, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 
@@ -103,7 +103,7 @@ export default function ShareModal({ isOpen, onClose, productUrl, productName, p
           onClick={onClose}
         >
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-          
+
           <motion.div
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -113,7 +113,7 @@ export default function ShareModal({ isOpen, onClose, productUrl, productName, p
             onClick={(e) => e.stopPropagation()}
           >
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-luxury-blue via-purple-500 to-pink-500" />
-            
+
             <div className="p-6 sm:p-8">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
@@ -133,7 +133,7 @@ export default function ShareModal({ isOpen, onClose, productUrl, productName, p
               {productImage && (
                 <div className="mb-6 flex items-center gap-4 p-3 bg-white/5 rounded-2xl">
                   <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0">
-                    <Image fill src={productImage} alt={productName} className="object-cover" />
+                    <Image fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" src={productImage} alt={productName} className="object-cover" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-white truncate">{productName}</p>
@@ -169,11 +169,10 @@ export default function ShareModal({ isOpen, onClose, productUrl, productName, p
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={handleCopy}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                      copied 
-                        ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${copied
+                        ? 'bg-green-500/20 text-green-400 border border-green-500/30'
                         : 'bg-luxury-blue text-white hover:bg-blue-600'
-                    }`}
+                      }`}
                   >
                     <AnimatePresence mode="wait">
                       {copied ? (
@@ -223,7 +222,7 @@ export default function ShareModal({ isOpen, onClose, productUrl, productName, p
                       <motion.div
                         key={i}
                         initial={{ scale: 0, opacity: 1 }}
-                        animate={{ 
+                        animate={{
                           scale: [0, 1, 0],
                           opacity: [1, 1, 0],
                           x: Math.cos(i * 30 * Math.PI / 180) * 100,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 
 export function CustomCursor() {
   const [position, setPosition] = useState({ x: 0, y: 0 });

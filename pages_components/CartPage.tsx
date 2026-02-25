@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowLeft, ShieldCheck, Truck, Gift } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import CartItem from '../components/CartItem';
 import { CartItem as CartItemType, ProductPrice } from '../types';
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   ArrowLeft,
@@ -14,9 +14,10 @@ import {
   Truck,
   RotateCcw,
   Minus,
-  Plus
+  Plus,
+  Loader2
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Product, Variation, Review, ProductPrice } from '../types';
 import { useProductStore } from '@/store/useProductStore';
 import { useReviewStore } from '@/store/useReviewStore';
@@ -47,7 +48,55 @@ export default function ProductDetailPage({ product, reviews, onBack, onAddToCar
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const { products: allProducts } = useProductStore();
-  const { voteHelpful, addReview } = useReviewStore();
+  const { voteHelpful, addReview, fetchReviews, reviews: storeReviews } = useReviewStore();
+  const [isReviewsInView, setIsReviewsInView] = useState(false);
+  const [isRelatedInView, setIsRelatedInView] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [thumbnailLoaded, setThumbnailLoaded] = useState<Record<number, boolean>>({});
+  const [showAllReviews, setShowAllReviews] = useState(false);
+
+  const effectiveReviews = Array.isArray(reviews) && reviews.length > 0 ? reviews : (Array.isArray(storeReviews) && storeReviews.length > 0 ? storeReviews : []);
+
+  useEffect(() => {
+    if (product?._id && effectiveReviews.length === 0) {
+      fetchReviews(product._id);
+    }
+  }, [product?._id, fetchReviews]);
+
+  const displayedReviews = showAllReviews ? effectiveReviews : (Array.isArray(effectiveReviews) ? effectiveReviews.slice(0, 2) : []);
+
+  useEffect(() => {
+    const reviewsObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsReviewsInView(true);
+          reviewsObserver.disconnect();
+        }
+      },
+      { rootMargin: '100px' }
+    );
+
+    const relatedObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsRelatedInView(true);
+          relatedObserver.disconnect();
+        }
+      },
+      { rootMargin: '100px' }
+    );
+
+    const reviewsSection = document.getElementById('reviews-section');
+    const relatedSection = document.getElementById('related-section');
+
+    if (reviewsSection) reviewsObserver.observe(reviewsSection);
+    if (relatedSection) relatedObserver.observe(relatedSection);
+
+    return () => {
+      reviewsObserver.disconnect();
+      relatedObserver.disconnect();
+    };
+  }, []);
 
   // SEO: Dynamic Page Title
   useEffect(() => {
@@ -78,7 +127,6 @@ export default function ProductDetailPage({ product, reviews, onBack, onAddToCar
     }
   };
 
-  const pkrPrice = formatPrice(product.price);
 
   return (
     <div className="pt-24 pb-20 px-6 max-w-7xl mx-auto relative">
@@ -102,14 +150,21 @@ export default function ProductDetailPage({ product, reviews, onBack, onAddToCar
         {/* Left Side: Product Image Gallery */}
         <div className="lg:col-span-7 flex flex-col gap-6">
           <div className="aspect-[4/5] w-full bg-luxury-gray rounded-3xl overflow-hidden relative group">
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-luxury-gray animate-pulse flex items-center justify-center">
+                <Loader2 className="w-8 h-8 text-luxury-muted animate-spin" />
+              </div>
+            )}
             <motion.img
               key={selectedImage}
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              animate={{ opacity: imageLoaded ? 1 : 0 }}
+              onLoad={() => setImageLoaded(true)}
               src={selectedImage}
               alt={product.name}
               className="w-full h-full object-cover object-center transform transition-transform duration-700 group-hover:scale-110"
               referrerPolicy="no-referrer"
+              style={{ display: imageLoaded ? 'block' : 'none' }}
             />
             <div className="absolute bottom-6 right-6">
               <button className="bg-white/10 backdrop-blur-md p-3 rounded-full text-white border border-white/20 hover:bg-white/20 transition-all">
@@ -121,11 +176,22 @@ export default function ProductDetailPage({ product, reviews, onBack, onAddToCar
             {product.variations.map((v, i) => (
               <div
                 key={i}
-                onClick={() => setSelectedImage(v.image_url)}
+                onClick={() => { setSelectedImage(v.image_url); setImageLoaded(false); }}
                 className={`relative aspect-square rounded-2xl border-2 overflow-hidden cursor-pointer transition-all ${selectedImage === v.image_url ? 'border-luxury-blue' : 'border-transparent hover:border-luxury-muted'
                   }`}
               >
-                <Image fill src={v.image_url} alt={`Thumbnail ${i}`} className="object-cover" referrerPolicy="no-referrer" />
+                {!thumbnailLoaded[i] && (
+                  <div className="absolute inset-0 bg-luxury-gray animate-pulse" />
+                )}
+                <Image
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  src={v.image_url}
+                  alt={`Thumbnail ${i}`}
+                  className="object-cover"
+                  referrerPolicy="no-referrer"
+                  onLoad={() => setThumbnailLoaded(prev => ({ ...prev, [i]: true }))}
+                />
               </div>
             ))}
           </div>
@@ -164,6 +230,7 @@ export default function ProductDetailPage({ product, reviews, onBack, onAddToCar
                     >
                       <Image
                         fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                         src={v.image_url}
                         className="object-cover"
                         title={v.color}
@@ -210,7 +277,7 @@ export default function ProductDetailPage({ product, reviews, onBack, onAddToCar
                 className="w-full py-5 rounded-2xl text-white font-bold tracking-widest uppercase text-sm shadow-xl shadow-luxury-blue/20 transition-all hover:scale-[1.02] hover:shadow-luxury-blue/30 active:scale-95 bg-luxury-blue flex items-center justify-center gap-3"
               >
                 <ShoppingCart className="w-5 h-5" />
-                Add to Selection
+                Add to Cart
               </button>
               <button
                 onClick={() => setIsShareModalOpen(true)}
@@ -260,86 +327,135 @@ export default function ProductDetailPage({ product, reviews, onBack, onAddToCar
       </div>
 
       {/* Reviews Section */}
-      <section className="mt-32 border-t border-luxury-border pt-20">
-        <div className="flex flex-col md:flex-row justify-between items-start gap-12">
-          <div className="md:w-1/3 space-y-6 md:sticky md:top-32">
-            <h2 className="text-3xl font-serif font-bold text-luxury-text">Client Reviews</h2>
-            <div className="flex items-center gap-4">
-              <div className="text-5xl font-serif font-black text-luxury-blue">{product.rating.average}</div>
-              <div>
-                <div className="flex text-yellow-500 mb-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.rating.average) ? 'fill-current' : ''}`} />
-                  ))}
+      <section id="reviews-section" className="mt-32 border-t border-luxury-border pt-20">
+        {!isReviewsInView ? (
+          <div className="flex flex-col md:flex-row justify-between items-start gap-12">
+            <div className="md:w-1/3 space-y-6 md:sticky md:top-32">
+              <div className="h-12 w-48 bg-white/5 rounded animate-pulse"></div>
+              <div className="flex items-center gap-4">
+                <div className="h-16 w-16 bg-white/5 rounded animate-pulse"></div>
+                <div className="space-y-2">
+                  <div className="h-8 w-12 bg-white/5 rounded animate-pulse"></div>
+                  <div className="h-4 w-24 bg-white/5 rounded animate-pulse"></div>
                 </div>
-                <p className="text-xs text-luxury-muted uppercase tracking-widest">Based on {product.rating.count} reviews</p>
               </div>
             </div>
-            <button 
-              onClick={() => setIsReviewModalOpen(true)}
-              className="w-full py-4 rounded-xl border border-luxury-border text-xs font-bold uppercase tracking-widest text-luxury-text hover:bg-luxury-gray hover:border-luxury-blue transition-colors"
-            >
-              Write a Review
-            </button>
+            <div className="md:w-2/3">
+              <div className="h-32 bg-white/5 rounded-xl animate-pulse"></div>
+            </div>
           </div>
-
-          <div className="md:w-2/3 space-y-12">
-            {reviews && reviews.length > 0 ? (
-              reviews.map((review) => (
-                <div key={review._id} className="space-y-4 pb-12 border-b border-luxury-border last:border-0">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h4 className="font-bold text-luxury-text">{review.user_name}</h4>
-                      <div className="flex text-yellow-500 mt-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} className={`w-3 h-3 ${i < review.rating ? 'fill-current' : ''}`} />
-                        ))}
-                      </div>
-                    </div>
-                    <span className="text-[10px] uppercase tracking-widest text-luxury-muted">{new Date(review.created_at).toLocaleDateString()}</span>
+        ) : (
+          <div className="flex flex-col md:flex-row justify-between items-start gap-12">
+            <div className="md:w-1/3 space-y-6 md:sticky md:top-32">
+              <h2 className="text-3xl font-serif font-bold text-luxury-text">Client Reviews</h2>
+              <div className="flex items-center gap-4">
+                <div className="text-5xl font-serif font-black text-luxury-blue">{product.rating.average}</div>
+                <div>
+                  <div className="flex text-yellow-500 mb-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.rating.average) ? 'fill-current' : ''}`} />
+                    ))}
                   </div>
-                  <p className="text-luxury-muted leading-relaxed italic">"{review.text}"</p>
-                  <button
-                    onClick={() => voteHelpful(review._id)}
-                    className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-luxury-muted hover:text-luxury-blue transition-colors"
-                  >
-                    <ThumbsUp className="w-3 h-3" />
-                    Helpful ({review.helpful_votes || 0})
-                  </button>
+                  <p className="text-xs text-luxury-muted uppercase tracking-widest">Based on {product.rating.count} reviews</p>
                 </div>
-              ))
-            ) : (
-              <p className="text-luxury-muted italic">No reviews yet. Be the first to share your experience.</p>
-            )}
+              </div>
+              <button
+                onClick={() => setIsReviewModalOpen(true)}
+                className="w-full py-4 rounded-xl border border-luxury-border text-xs font-bold uppercase tracking-widest text-luxury-text hover:bg-luxury-gray hover:border-luxury-blue transition-colors"
+              >
+                Write a Review
+              </button>
+            </div>
+
+            <div className="md:w-2/3 space-y-12">
+              {displayedReviews.length > 0 ? (
+                <>
+                  {displayedReviews.map((review) => (
+                    <div key={review._id} className="space-y-4 pb-12 border-b border-luxury-border last:border-0">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="font-bold text-luxury-text">{review.user_name}</h4>
+                          <div className="flex text-yellow-500 mt-1">
+                            {[...Array(5)].map((_, i) => (
+                              <Star key={i} className={`w-3 h-3 ${i < review.rating ? 'fill-current' : ''}`} />
+                            ))}
+                          </div>
+                        </div>
+                        <span className="text-[10px] uppercase tracking-widest text-luxury-muted">{new Date(review.created_at).toLocaleDateString()}</span>
+                      </div>
+                      <p className="text-luxury-muted leading-relaxed italic">"{review.text}"</p>
+                      <button
+                        onClick={() => voteHelpful(review._id)}
+                        className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-luxury-muted hover:text-luxury-blue transition-colors"
+                      >
+                        <ThumbsUp className="w-3 h-3" />
+                        Helpful ({review.helpful_votes || 0})
+                      </button>
+                    </div>
+                  ))}
+                  {effectiveReviews && effectiveReviews.length > 2 && !showAllReviews && (
+                    <button
+                      onClick={() => setShowAllReviews(true)}
+                      className="w-full py-4 rounded-xl border border-luxury-border text-xs font-bold uppercase tracking-widest text-luxury-text hover:bg-luxury-gray hover:border-luxury-blue transition-colors"
+                    >
+                      See More Reviews ({effectiveReviews.length - 2} more)
+                    </button>
+                  )}
+                </>
+              ) : (
+                <p className="text-luxury-muted italic">No reviews yet. Be the first to share your experience.</p>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </section>
 
       {/* Related Products */}
-      <section className="mt-32 pb-20">
-        <div className="flex justify-between items-end mb-12">
-          <h3 className="text-2xl font-serif font-black text-luxury-text uppercase tracking-wider">You May Also Like</h3>
-          <button className="text-xs font-bold uppercase tracking-widest text-luxury-blue hover:underline" onClick={onBack}>View Collection</button>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          {allProducts.filter(p => p._id !== product._id).slice(0, 4).map((p) => (
-            <div key={p._id} className="space-y-4 group cursor-pointer" onClick={() => { window.scrollTo(0, 0); router.push(`/product/${p.slug}`); }}>
-              <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-luxury-gray">
-                <Image
-                  fill
-                  src={p.variations?.[0]?.image_url || ''}
-                  alt={p.name}
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-              <div>
-                <h4 className="font-bold text-sm uppercase tracking-wide text-luxury-text group-hover:text-luxury-blue transition-colors line-clamp-1">{p.name}</h4>
-                <p className="text-luxury-muted text-sm">PKR {formatPrice(p.price)}</p>
-              </div>
+      <section id="related-section" className="mt-32 pb-20">
+        {!isRelatedInView ? (
+          <>
+            <div className="flex justify-between items-end mb-12">
+              <div className="h-10 w-56 bg-white/5 rounded animate-pulse"></div>
+              <div className="h-4 w-28 bg-white/5 rounded animate-pulse"></div>
             </div>
-          ))}
-        </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="space-y-4">
+                  <div className="aspect-[3/4] bg-luxury-gray/50 rounded-2xl animate-pulse"></div>
+                  <div className="h-4 w-3/4 bg-white/5 rounded animate-pulse"></div>
+                  <div className="h-4 w-1/2 bg-white/5 rounded animate-pulse"></div>
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="flex justify-between items-end mb-12">
+              <h3 className="text-2xl font-serif font-black text-luxury-text uppercase tracking-wider">You May Also Like</h3>
+              <button className="text-xs font-bold uppercase tracking-widest text-luxury-blue hover:underline" onClick={onBack}>View Collection</button>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {(Array.isArray(allProducts) ? allProducts.filter(p => p._id !== product._id).slice(0, 4) : []).map((p) => (
+                <div key={p._id} className="space-y-4 group cursor-pointer" onClick={() => { window.scrollTo(0, 0); router.push(`/product/${p.slug}`); }}>
+                  <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-luxury-gray">
+                    <Image
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      src={p.variations?.[0]?.image_url || ''}
+                      alt={p.name}
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm uppercase tracking-wide text-luxury-text group-hover:text-luxury-blue transition-colors line-clamp-1">{p.name}</h4>
+                    <p className="text-luxury-muted text-sm">PKR {formatPrice(p.price)}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </section>
 
       {/* Sticky Action Bar */}
@@ -354,7 +470,7 @@ export default function ProductDetailPage({ product, reviews, onBack, onAddToCar
             <div className="w-full max-w-xl bg-luxury-nav/90 backdrop-blur-xl border border-white/10 rounded-2xl p-3 shadow-2xl flex items-center gap-3">
               <div className="hidden sm:flex items-center gap-3 shrink-0">
                 <div className="relative w-12 h-12 overflow-hidden rounded-xl">
-                  <Image fill src={selectedImage} className="object-cover" alt="" />
+                  <Image fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" src={selectedImage} className="object-cover" alt="" />
                 </div>
                 <div className="max-w-[120px]">
                   <h4 className="text-xs font-bold text-white truncate">{product.name}</h4>
@@ -366,9 +482,9 @@ export default function ProductDetailPage({ product, reviews, onBack, onAddToCar
                 className="flex-1 bg-luxury-blue text-white py-3.5 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-blue-600 transition-all flex items-center justify-center gap-2"
               >
                 <ShoppingCart className="w-4 h-4" />
-                Add to selection
+                Add to Cart
               </button>
-              <button 
+              <button
                 onClick={() => setIsShareModalOpen(true)}
                 className="p-3.5 rounded-xl bg-white/5 text-white hover:bg-white/10 transition-colors shrink-0"
               >

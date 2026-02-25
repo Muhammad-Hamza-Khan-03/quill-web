@@ -4,9 +4,12 @@ import HomePage from '@/pages_components/HomePage';
 import { useRouter } from 'next/navigation';
 import { Product } from '@/types';
 import { useProductStore } from '@/store/useProductStore';
+import { useCart } from '@/components/CartProvider';
 
 export default function About() {
     const router = useRouter();
+    const { products, loading } = useProductStore();
+    const { addToCart } = useCart();
 
     const handleExplore = () => {
         router.push('/collections');
@@ -24,8 +27,6 @@ export default function About() {
         }
     };
 
-    const { products, loading } = useProductStore();
-
     return (
         <HomePage
             onExplore={handleExplore}
@@ -33,6 +34,7 @@ export default function About() {
             onPageChange={handlePageChange}
             products={products}
             loading={loading}
+            onAddToCart={addToCart}
         />
     );
 }

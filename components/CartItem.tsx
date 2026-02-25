@@ -21,6 +21,7 @@ export default function CartItem({ item, onUpdateQuantity, onRemove }: CartItemP
         <Image
           fill
           src={itemImage}
+          sizes="(max-width: 768px) 100vw, 50vw"
           alt={item.name}
           className="object-cover"
           referrerPolicy="no-referrer"

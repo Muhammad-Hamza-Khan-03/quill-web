@@ -35,7 +35,7 @@ export default function Navbar({ logoUrl }: NavbarProps) {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 cursor-pointer group">
             {logoUrl ? (
-              <Image width={40} height={40} src={logoUrl} alt="Pashmina Luxury" className="object-contain rounded-lg" />
+              <Image fill sizes="(max-width: 768px) 100vw, 50vw" width={40} height={40} src={logoUrl} alt="Pashmina Luxury" className="object-contain rounded-lg" />
             ) : (
               <Layers className="w-8 h-8 text-luxury-blue transition-transform group-hover:scale-110" />
             )}
