@@ -27,6 +27,26 @@ const nextConfig = {
                 hostname: 'cdn.shopify.com',
                 pathname: '/**',
             },
+            {
+                protocol: 'https',
+                hostname: '*.cloudfront.net',
+                pathname: '/**',
+            },
+            {
+                protocol: 'https',
+                hostname: '*.akamaihd.net',
+                pathname: '/**',
+            },
+            {
+                protocol: 'https',
+                hostname: '*.cloudflare.com',
+                pathname: '/**',
+            },
+            {
+                protocol: 'https',
+                hostname: 'img.clerk.com',
+                pathname: '/**',
+            },
         ],
     }
 };

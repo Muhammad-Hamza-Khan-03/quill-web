@@ -13,9 +13,10 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const getProductImage = (product: Product) => {
-    return product.variations && product.variations.length > 0
+    const imageUrl = product.variations && product.variations.length > 0
       ? product.variations[0].image_url
-      : 'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?q=80&w=400&auto=format&fit=crop';
+      : null;
+    return imageUrl || 'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?q=80&w=400&auto=format&fit=crop';
   };
 
   return (
@@ -31,11 +32,12 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         )}
         <Image
           fill
-          src={getProductImage(product)}
+          src={getProductImage(product) || '/placeholder.jpg'}
           alt={product.name}
           className={`object-cover transition-transform duration-700 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
           referrerPolicy="no-referrer"
           onLoad={() => setImageLoaded(true)}
+          onError={() => setImageLoaded(true)}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
         />
         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
