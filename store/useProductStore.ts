@@ -20,12 +20,12 @@ interface ProductState {
     page: number;
     pages: number;
 
-    fetchProducts: (params?: { skip?: number; limit?: number; category?: string }) => Promise<void>;
+    fetchProducts: (params?: { skip?: number; limit?: number; category?: string; append?: boolean }) => Promise<void>;
     fetchProductBySlug: (slug: string) => Promise<void>;
     setCurrentProduct: (product: Product | null) => void;
 }
 
-const getCacheKey = (params: { skip?: number; limit?: number; category?: string }) => 
+const getCacheKey = (params: { skip?: number; limit?: number; category?: string; append?: boolean }) => 
     `${params.category || 'all'}-${params.skip}-${params.limit}`;
 
 export const useProductStore = create<ProductState>((set) => ({
@@ -37,11 +37,11 @@ export const useProductStore = create<ProductState>((set) => ({
     page: 1,
     pages: 1,
 
-    fetchProducts: async (params = { skip: 0, limit: 12 }) => {
+    fetchProducts: async (params = { skip: 0, limit: 12, append: false }) => {
         const cacheKey = getCacheKey(params);
         const cached = productCache[cacheKey];
         
-        if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+        if (!params.append && cached && Date.now() - cached.timestamp < CACHE_DURATION) {
             set({
                 products: cached.data!.items,
                 total: cached.data!.total,
@@ -68,13 +68,13 @@ export const useProductStore = create<ProductState>((set) => ({
             
             productCache[cacheKey] = { data, timestamp: Date.now() };
             
-            set({
-                products: data.items,
+            set((state) => ({
+                products: params.append ? [...state.products, ...data.items] : data.items,
                 total: data.total,
                 page: data.page,
                 pages: data.pages,
                 loading: false
-            });
+            }));
         } catch (error: any) {
             set({ error: error.message, loading: false });
         }

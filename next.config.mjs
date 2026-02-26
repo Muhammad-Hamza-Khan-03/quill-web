@@ -17,6 +17,16 @@ const nextConfig = {
                 hostname: 'images.unsplash.com',
                 pathname: '/**',
             },
+            {
+                protocol: 'https',
+                hostname: 'scarvesaustralia.com.au',
+                pathname: '/**',
+            },
+            {
+                protocol: 'https',
+                hostname: 'cdn.shopify.com',
+                pathname: '/**',
+            },
         ],
     }
 };

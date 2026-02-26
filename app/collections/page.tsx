@@ -28,7 +28,7 @@ export default function Collections() {
             loading={loading}
             total={total}
             pages={pages}
-            fetchMore={(skip) => fetchProducts({ skip })}
+            fetchMore={(skip) => fetchProducts({ skip, append: true })}
         />
     );
 }
